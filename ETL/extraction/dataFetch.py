@@ -19,11 +19,11 @@ for league_id in range(start_league_id, end_league_id + 1):
         all_teams.extend(teams)
 
 
-csv_file_path = os.path.join( "Files" , 'players_1_to_500.csv')
+csv_file_path = os.path.join( "Files" , 'players_test.csv')
 
 
-if not os.path.exists('players_1_to_500.csv'):
-    with open('players_1_to_500.csv', 'w', newline='', encoding='utf-8') as csvfile:
+if not os.path.exists(csv_file_path):
+    with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = [
             'player_key', 'player_id', 'player_image', 'player_name', 'player_number',
             'player_country', 'player_type', 'player_age', 'player_match_played',
@@ -44,12 +44,12 @@ if not os.path.exists('players_1_to_500.csv'):
 
 
 existing_players = set()
-with open('players_1_to_500.csv', 'r', newline='', encoding='utf-8') as csvfile:
+with open(csv_file_path, 'r', newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         existing_players.add(row['player_key'])
 
-with open('players_1_to_500.csv', 'a', newline='', encoding='utf-8') as csvfile:
+with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = [
         'player_key', 'player_id', 'player_image', 'player_name', 'player_number',
             'player_country', 'player_type', 'player_age', 'player_match_played',
@@ -66,6 +66,7 @@ with open('players_1_to_500.csv', 'a', newline='', encoding='utf-8') as csvfile:
             'player_woordworks', 'player_rating','player_birthdate'
     ]
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
 
     for team in all_teams:
         players = team["players"]
