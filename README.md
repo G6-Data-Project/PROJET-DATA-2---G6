@@ -17,7 +17,7 @@ Nous avons convenu d'utiliser les outils et langages suivants :
 
 ## Tâches
 La répartition des tâches s'est effectuée au sein de notre organisation GitHub, utilisant l'outil Project. Voici la composition de notre équipe :
-- Abraham : Full-Stack (ChatGPT)
+- Abraham : Full-Stack 
 - Fabien : Product Owner
 - Vohizy : Opérations (OPS)
 - Mirado : Backend
