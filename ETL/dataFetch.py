@@ -1,8 +1,8 @@
 import requests
 import csv
 
-start_league_id = 1
-end_league_id = 5
+start_league_id = 401
+end_league_id = 450
 apy_key = "ff59da0b57691fd4b8c7b19768cccbca0f2b1fba43a305c16c6e1071f4ea15f0"
 
 all_teams = []
@@ -13,8 +13,9 @@ for league_id in range(start_league_id, end_league_id + 1):
 
     if response.status_code == 200:
         teams = response.json()
+        all_teams.extend(teams)
 
-    with open('players.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open('players_401_to_450.csv', 'w', newline='', encoding='utf-8') as csvfile:
         fieldnames = [
             'player_key', 'player_id', 'player_image', 'player_name', 'player_number',
             'player_country', 'player_type', 'player_age', 'player_match_played',
@@ -34,7 +35,7 @@ for league_id in range(start_league_id, end_league_id + 1):
         writer.writeheader()
 
 
-        for team in teams:
+        for team in all_teams:
             players = team["players"]
 
             for player in players:
