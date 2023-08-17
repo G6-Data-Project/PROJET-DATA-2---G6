@@ -1,13 +1,33 @@
-import pandas as pd
-import numpy as np
+# this function calculate the forward rating according to his goal, shoot total and match played during one season
+def calculate_player_forward_rating(player_data):
+    position = player_data["player_type"]
+    position_coefficients = coefficients_by_position.get(position, {"goal_coeff": 1, "shot_coeff": 0.1, "match_coeff": 0.5})
 
-# ... (définition de la fonction calculate_player_forward_rating, coefficients_by_position, etc.)
+    goal_coeff = position_coefficients["goal_coeff"]
+    shot_coeff = position_coefficients["shot_coeff"]
+    match_coeff = position_coefficients["match_coeff"]
 
-# Charger le fichier CSV dans un DataFrame
+    raw_rating = ((player_data["player_goals"] * goal_coeff) + (player_data["player_shots_total"] * shot_coeff) + (player_data["player_match_played"] * match_coeff)) / (shot_coeff + match_coeff + goal_coeff)
+    
+    min_raw_rating = (0 * goal_coeff) + (0 * shot_coeff) + (0 * match_coeff)
+    max_raw_rating = (10 * goal_coeff) + (100 * shot_coeff) + (90 * match_coeff)
+
+    normalized_rating = (raw_rating - min_raw_rating) / (max_raw_rating - min_raw_rating) * 9 + 1
+    
+    if normalized_rating > 10:
+        return 10
+    else:
+        return normalized_rating
+coefficients_by_position = {
+    "AC": {"goal_coeff": 5, "shot_coeff": 0.2, "match_coeff": 0.5},
+}
 df = pd.read_csv('players_1_to_500.csv')
 
-# Convertir les colonnes pertinentes en numériques
-# ... (comme dans le code précédent)
+# Convertir les colonnes pertinentes en numériques en traitant les valeurs non numériques
+df['player_age'] = pd.to_numeric(df['player_age'], errors='coerce')
+df['player_goals'] = pd.to_numeric(df['player_goals'], errors='coerce')
+df['player_shots_total'] = pd.to_numeric(df['player_shots_total'], errors='coerce')
+df['player_match_played'] = pd.to_numeric(df['player_match_played'], errors='coerce')
 
 # Filtrer les attaquants selon les critères
 filtered_forwards = df[
@@ -42,10 +62,7 @@ if not filtered_forwards.empty:
     # Imprimer les attaquants triés avec leurs noms, âges, types, buts, matchs joués, notations et ratios
     print(top_5_players[['player_name', 'player_age', 'player_type', 'player_goals', 'player_match_played', 'forward_rating', 'player_rating', 'final_rating', 'ratio']])
     selected_column = ['player_name', 'player_image','player_country', 'player_age', 'player_type', 'player_goals', 'player_shots_total', 'player_match_played', 'forward_rating', 'player_rating', 'final_rating', 'ratio']
-    
-    export_path = '../Files/result/'
-    file_name = 'top_5_forwards_stats.csv'
-    top_5_players[selected_column].to_csv(export_path + file_name, index=False)
+    top_5_players[selected_column].to_csv('top_5_forwards_stats.csv', index=False)
 
 else:
     print("Aucun attaquant ne satisfait les critères de filtrage.")
