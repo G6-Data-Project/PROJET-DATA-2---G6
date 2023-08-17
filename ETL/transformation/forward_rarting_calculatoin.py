@@ -42,7 +42,10 @@ if not filtered_forwards.empty:
     # Imprimer les attaquants triés avec leurs noms, âges, types, buts, matchs joués, notations et ratios
     print(top_5_players[['player_name', 'player_age', 'player_type', 'player_goals', 'player_match_played', 'forward_rating', 'player_rating', 'final_rating', 'ratio']])
     selected_column = ['player_name', 'player_image','player_country', 'player_age', 'player_type', 'player_goals', 'player_shots_total', 'player_match_played', 'forward_rating', 'player_rating', 'final_rating', 'ratio']
-    top_5_players[selected_column].to_csv('top_5_forwards_stats.csv', index=False)
+    
+    export_path = '../Files/result/'
+    file_name = 'top_5_forwards_stats.csv'
+    top_5_players[selected_column].to_csv(export_path + file_name, index=False)
 
 else:
     print("Aucun attaquant ne satisfait les critères de filtrage.")
